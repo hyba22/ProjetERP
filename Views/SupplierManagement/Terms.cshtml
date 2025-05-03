@@ -1,0 +1,40 @@
+﻿@model IEnumerable<ProjetERP.ViewModels.TermsAndConditionsViewModel>
+
+@{
+    ViewData["Title"] = "Conditions générales - " + ViewData["SupplierName"];
+    int supplierId = (int)ViewData["SupplierId"];
+}
+
+<h1>Conditions générales pour @ViewData["SupplierName"]</h1>
+
+<p>
+    <a asp-action="CreateTerms" asp-route-id="@supplierId" class="btn btn-primary">Ajouter des conditions générales</a>
+    <a asp-action="Index" class="btn btn-secondary">Retour aux fournisseurs</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Contenu</th>
+            <th>Version</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var term in Model)
+            {
+                <tr>
+                    <td>@term.Content</td>
+                    <td>@term.Version</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="2">Aucune condition générale trouvée.</td>
+            </tr>
+        }
+    </tbody>
+</table>

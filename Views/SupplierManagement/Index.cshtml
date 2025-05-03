@@ -1,0 +1,50 @@
+﻿@model IEnumerable<ProjetERP.ViewModels.SupplierViewModel>
+
+@{
+    ViewData["Title"] = "Gestion des fournisseurs";
+}
+
+<h1>Gestion des fournisseurs</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Ajouter un fournisseur</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Email</th>
+            <th>Téléphone</th>
+            <th>Adresse</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var supplier in Model)
+            {
+                <tr>
+                    <td>@supplier.Name</td>
+                    <td>@supplier.ContactEmail</td>
+                    <td>@supplier.Phone</td>
+                    <td>@supplier.Address</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@supplier.SupplierId">Modifier</a> |
+                        <a asp-action="Delete" asp-route-id="@supplier.SupplierId">Supprimer</a> |
+                        <a asp-action="Contracts" asp-route-id="@supplier.SupplierId">Contrats</a> |
+                        <a asp-action="Terms" asp-route-id="@supplier.SupplierId">Conditions générales</a> |
+                        <a asp-action="Performances" asp-route-id="@supplier.SupplierId">Performances</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5">Aucun fournisseur trouvé.</td>
+            </tr>
+        }
+    </tbody>
+</table>

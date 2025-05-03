@@ -1,0 +1,51 @@
+﻿@model IEnumerable<ProjetERP.ViewModels.ContractViewModel>
+
+@{
+    ViewData["Title"] = "Contrats - " + ViewData["SupplierName"];
+    int supplierId = (int)ViewData["SupplierId"];
+}
+
+<h1>Contrats pour @ViewData["SupplierName"]</h1>
+
+<p>
+    <a asp-action="CreateContract" asp-route-id="@supplierId" class="btn btn-primary">Ajouter un contrat</a>
+    <a asp-action="Index" class="btn btn-secondary">Retour aux fournisseurs</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Titre</th>
+            <th>Date de début</th>
+            <th>Date de fin</th>
+            <th>Statut</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var contract in Model)
+            {
+                <tr>
+                    <td>@contract.Title</td>
+                    <td>@contract.StartDate.ToString("dd/MM/yyyy")</td>
+                    <td>@contract.EndDate.ToString("dd/MM/yyyy")</td>
+                    <td>@contract.Status</td>
+                    <td>
+                        @if (contract.Status == "Active")
+                        {
+                            <a asp-action="TerminateContract" asp-route-id="@contract.ContractId" asp-route-supplierId="@contract.SupplierId" class="btn btn-danger btn-sm">Résilier</a>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5">Aucun contrat trouvé.</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,42 @@
+﻿@model IEnumerable<ProjetERP.ViewModels.SupplierPerformanceViewModel>
+
+@{
+    ViewData["Title"] = "Performances - " + ViewData["SupplierName"];
+    int supplierId = (int)ViewData["SupplierId"];
+}
+
+<h1>Performances pour @ViewData["SupplierName"]</h1>
+
+<p>
+    <a asp-action="CreatePerformance" asp-route-id="@supplierId" class="btn btn-primary">Ajouter une performance</a>
+    <a asp-action="Index" class="btn btn-secondary">Retour aux fournisseurs</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Date d'évaluation</th>
+            <th>Score</th>
+            <th>Commentaires</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var performance in Model)
+            {
+                <tr>
+                    <td>@performance.EvaluationDate.ToString("dd/MM/yyyy")</td>
+                    <td>@performance.Score</td>
+                    <td>@performance.Comments</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="3">Aucune performance trouvée.</td>
+            </tr>
+        }
+    </tbody>
+</table>

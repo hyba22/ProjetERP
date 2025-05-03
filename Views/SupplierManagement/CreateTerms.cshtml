@@ -1,0 +1,30 @@
+﻿@model ProjetERP.ViewModels.TermsAndConditionsViewModel
+
+@{
+    ViewData["Title"] = "Ajouter des conditions générales";
+}
+
+<h2>Ajouter des conditions générales</h2>
+
+<form asp-action="CreateTerms" method="post">
+    <input type="hidden" asp-for="SupplierId" />
+    <div class="form-group">
+        <label asp-for="Content" class="control-label"></label>
+        <textarea asp-for="Content" class="form-control" rows="5"></textarea>
+        <span asp-validation-for="Content" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Version" class="control-label"></label>
+        <input asp-for="Version" class="form-control" />
+        <span asp-validation-for="Version" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Ajouter</button>
+        <a asp-action="Terms" asp-route-id="@Model.SupplierId" class="btn btn-secondary">Annuler</a>
+    </div>
+</form>
+
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

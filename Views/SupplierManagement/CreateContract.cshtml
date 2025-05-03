@@ -1,0 +1,63 @@
+﻿@model ProjetERP.ViewModels.ContractViewModel
+
+@{
+    ViewData["Title"] = "Ajouter un contrat";
+}
+
+<h2>Ajouter un contrat</h2>
+
+<form asp-action="CreateContract" method="post" id="contractForm">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="SupplierId" id="SupplierId" />
+
+    <div class="form-group">
+        <label asp-for="Title" class="control-label"></label>
+        <input asp-for="Title" class="form-control" id="Title" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="StartDate" class="control-label"></label>
+        <input asp-for="StartDate" class="form-control" type="date" id="StartDate" />
+        <span asp-validation-for="StartDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EndDate" class="control-label"></label>
+        <input asp-for="EndDate" class="form-control" type="date" id="EndDate" />
+        <span asp-validation-for="EndDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Terms" class="control-label"></label>
+        <textarea asp-for="Terms" class="form-control" rows="5" id="Terms"></textarea>
+        <span asp-validation-for="Terms" class="text-danger"></span>
+    </div>
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Ajouter</button>
+        <a asp-action="Contracts" asp-route-id="@Model.SupplierId" class="btn btn-secondary">Annuler</a>
+    </div>
+</form>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#contractForm").submit(function (event) {
+                console.log("Form submitted to CreateContract");
+                console.log("Form data:", {
+                    SupplierId: $("#SupplierId").val(),
+                    Title: $("#Title").val(),
+                    StartDate: $("#StartDate").val(),
+                    EndDate: $("#EndDate").val(),
+                    Terms: $("#Terms").val()
+                });
+                // Ne pas empêcher la soumission, juste logger
+            });
+        });
+    </script>
+}
