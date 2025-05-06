@@ -55,6 +55,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
+builder.Services.AddScoped<IClientRepository, ClientRepository>();
 
 var app = builder.Build();
 
@@ -109,6 +110,7 @@ using (var scope = app.Services.CreateScope())
             logger.LogInformation("No pending migrations to apply.");
         }
 
+        // Création des rôles
         string[] roles = ["Admin", "Accountant", "Client", "Supplier"];
         foreach (var role in roles)
         {
@@ -135,6 +137,7 @@ using (var scope = app.Services.CreateScope())
             }
         }
 
+        // Création de l'utilisateur admin
         var adminEmail = "bibooo5378@gmail.com";
         if (string.IsNullOrEmpty(adminEmail))
         {
@@ -153,8 +156,7 @@ using (var scope = app.Services.CreateScope())
                 Email = adminEmail,
                 EmailConfirmed = true,
                 FirstName = "Admin",
-                LastName = "Admin",
-                Role = RoleType.Admin
+                LastName = "Admin"
             };
             var result = await userManager.CreateAsync(adminUser, "Admin@1234");
             if (result.Succeeded)
@@ -171,6 +173,48 @@ using (var scope = app.Services.CreateScope())
         else
         {
             logger.LogInformation("Admin user already exists.");
+            if (!await userManager.IsInRoleAsync(adminUser, "Admin"))
+            {
+                await userManager.AddToRoleAsync(adminUser, "Admin");
+                logger.LogInformation("Admin role assigned to existing admin user.");
+            }
+        }
+
+        // Création d'un utilisateur Client pour tester
+        var clientEmail = "client@example.com";
+        logger.LogInformation($"Checking for Client user with email {clientEmail}...");
+        var clientUser = await userManager.FindByEmailAsync(clientEmail);
+        if (clientUser == null)
+        {
+            logger.LogInformation("Creating Client user...");
+            clientUser = new User
+            {
+                UserName = clientEmail,
+                Email = clientEmail,
+                EmailConfirmed = true,
+                FirstName = "Client",
+                LastName = "Test"
+            };
+            var result = await userManager.CreateAsync(clientUser, "Client@1234");
+            if (result.Succeeded)
+            {
+                await userManager.AddToRoleAsync(clientUser, "Client");
+                logger.LogInformation("Client user created and assigned to Client role.");
+            }
+            else
+            {
+                logger.LogError($"Failed to create Client user: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+                throw new Exception($"Failed to create Client user: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+            }
+        }
+        else
+        {
+            logger.LogInformation("Client user already exists.");
+            if (!await userManager.IsInRoleAsync(clientUser, "Client"))
+            {
+                await userManager.AddToRoleAsync(clientUser, "Client");
+                logger.LogInformation("Client role assigned to existing Client user.");
+            }
         }
     }
     catch (Exception ex)

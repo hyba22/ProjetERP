@@ -1,0 +1,42 @@
+﻿@model IEnumerable<ProjetERP.ViewModels.ClientCommunicationViewModel>
+
+@{
+    ViewData["Title"] = "Communications - " + ViewData["ClientName"];
+    int clientId = (int)ViewData["ClientId"];
+}
+
+<h1>Communications pour @ViewData["ClientName"]</h1>
+
+<p>
+    <a asp-action="CreateCommunication" asp-route-id="@clientId" class="btn btn-primary">Ajouter une communication</a>
+    <a asp-action="Index" class="btn btn-secondary">Retour aux clients</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Type</th>
+            <th>Contenu</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var communication in Model)
+            {
+                <tr>
+                    <td>@communication.Type</td>
+                    <td>@communication.Content</td>
+                    <td>@communication.CommunicationDate.ToString("dd/MM/yyyy HH:mm")</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="3">Aucune communication trouvée.</td>
+            </tr>
+        }
+    </tbody>
+</table>

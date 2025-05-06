@@ -1,0 +1,44 @@
+﻿@model ProjetERP.ViewModels.DeliveryViewModel
+
+@{
+    ViewData["Title"] = "Ajouter une livraison";
+}
+
+<h2>Ajouter une livraison</h2>
+
+<form asp-action="CreateDelivery" method="post">
+    <input type="hidden" asp-for="ClientId" />
+    <div class="form-group">
+        <label asp-for="OrderNumber" class="control-label"></label>
+        <input asp-for="OrderNumber" class="form-control" />
+        <span asp-validation-for="OrderNumber" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DeliveryDate" class="control-label"></label>
+        <input asp-for="DeliveryDate" class="form-control" type="date" />
+        <span asp-validation-for="DeliveryDate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Status" class="control-label"></label>
+        <select asp-for="Status" class="form-control">
+            <option value="Pending">En attente</option>
+            <option value="Shipped">Expédié</option>
+            <option value="Delivered">Livré</option>
+        </select>
+        <span asp-validation-for="Status" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Details" class="control-label"></label>
+        <textarea asp-for="Details" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="Details" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Ajouter</button>
+        <a asp-action="Deliveries" asp-route-id="@Model.ClientId" class="btn btn-secondary">Annuler</a>
+    </div>
+</form>
+
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

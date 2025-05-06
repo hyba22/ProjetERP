@@ -1,0 +1,44 @@
+﻿@model IEnumerable<ProjetERP.ViewModels.DeliveryViewModel>
+
+@{
+    ViewData["Title"] = "Livraisons - " + ViewData["ClientName"];
+    int clientId = (int)ViewData["ClientId"];
+}
+
+<h1>Livraisons pour @ViewData["ClientName"]</h1>
+
+<p>
+    <a asp-action="CreateDelivery" asp-route-id="@clientId" class="btn btn-primary">Ajouter une livraison</a>
+    <a asp-action="Index" class="btn btn-secondary">Retour aux clients</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Numéro de commande</th>
+            <th>Date de livraison</th>
+            <th>Statut</th>
+            <th>Détails</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var delivery in Model)
+            {
+                <tr>
+                    <td>@delivery.OrderNumber</td>
+                    <td>@delivery.DeliveryDate.ToString("dd/MM/yyyy")</td>
+                    <td>@delivery.Status</td>
+                    <td>@delivery.Details</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4">Aucune livraison trouvée.</td>
+            </tr>
+        }
+    </tbody>
+</table>

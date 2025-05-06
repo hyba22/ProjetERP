@@ -1,0 +1,50 @@
+﻿@model IEnumerable<ProjetERP.ViewModels.ClientViewModel>
+
+@{
+    ViewData["Title"] = "Gestion des clients";
+}
+
+<h1>Gestion des clients</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Ajouter un client</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Email</th>
+            <th>Téléphone</th>
+            <th>Adresse</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var client in Model)
+            {
+                <tr>
+                    <td>@client.Name</td>
+                    <td>@client.ContactEmail</td>
+                    <td>@client.Phone</td>
+                    <td>@client.Address</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@client.ClientId">Modifier</a> |
+                        <a asp-action="Delete" asp-route-id="@client.ClientId">Supprimer</a> |
+                        <a asp-action="Communications" asp-route-id="@client.ClientId">Communications</a> |
+                        <a asp-action="Deliveries" asp-route-id="@client.ClientId">Livraisons</a> |
+                        <a asp-action="Quotes" asp-route-id="@client.ClientId">Devis</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5">Aucun client trouvé.</td>
+            </tr>
+        }
+    </tbody>
+</table>

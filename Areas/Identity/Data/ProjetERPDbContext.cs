@@ -17,6 +17,10 @@ namespace ProjetERP.Data
         public DbSet<Contract> Contracts { get; set; }
         public DbSet<SupplierPerformance> SupplierPerformances { get; set; }
         public DbSet<TermsAndConditions> TermsAndConditions { get; set; }
+        public DbSet<Client> Clients { get; set; }
+        public DbSet<ClientCommunication> ClientCommunications { get; set; }
+        public DbSet<Delivery> Deliveries { get; set; }
+        public DbSet<Quote> Quotes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -121,6 +125,62 @@ namespace ProjetERP.Data
                 entity.Property(e => e.CreatedAt).HasColumnType("datetime").IsRequired(); // Assuré non nullable
                 entity.HasOne(e => e.Supplier).WithMany().HasForeignKey(e => e.SupplierId);
             });
+            // Configuration des tables pour la gestion des clients
+            builder.Entity<Client>(entity =>
+            {
+                entity.ToTable("Clients");
+                entity.HasKey(e => e.ClientId);
+                entity.Property(e => e.ClientId).HasColumnName("ClientId").ValueGeneratedOnAdd();
+                entity.Property(e => e.Name).HasColumnType("varchar(100)").IsRequired();
+                entity.Property(e => e.ContactEmail).HasColumnType("varchar(100)").IsRequired();
+                entity.Property(e => e.Phone).HasColumnType("varchar(20)").IsRequired();
+                entity.Property(e => e.Address).HasColumnType("text").IsRequired();
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime").IsRequired(); // Assuré non nullable
+                entity.Property(e => e.UpdatedAt).HasColumnType("datetime").IsRequired(); // Assuré non nullable
+            });
+
+            builder.Entity<ClientCommunication>(entity =>
+            {
+                entity.ToTable("ClientCommunications");
+                entity.HasKey(e => e.CommunicationId);
+                entity.Property(e => e.CommunicationId).HasColumnName("CommunicationId").ValueGeneratedOnAdd();
+                entity.Property(e => e.ClientId).HasColumnName("ClientId").IsRequired();
+                entity.Property(e => e.Type).HasColumnType("varchar(50)").IsRequired();
+                entity.Property(e => e.Content).HasColumnType("text").IsRequired();
+                entity.Property(e => e.CommunicationDate).HasColumnType("datetime").IsRequired(); // Assuré non nullable
+                entity.HasOne(e => e.Client).WithMany().HasForeignKey(e => e.ClientId);
+            });
+
+            builder.Entity<Delivery>(entity =>
+            {
+                entity.ToTable("Deliveries");
+                entity.HasKey(e => e.DeliveryId);
+                entity.Property(e => e.DeliveryId).HasColumnName("DeliveryId").ValueGeneratedOnAdd();
+                entity.Property(e => e.ClientId).HasColumnName("ClientId").IsRequired();
+                entity.Property(e => e.OrderNumber).HasColumnType("varchar(100)").IsRequired();
+                entity.Property(e => e.DeliveryDate).HasColumnType("date").IsRequired(); // Assuré non nullable
+                entity.Property(e => e.Status).HasColumnType("varchar(50)").IsRequired();
+                entity.Property(e => e.Details).HasColumnType("text");
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime").IsRequired(); // Assuré non nullable
+                entity.HasOne(e => e.Client).WithMany().HasForeignKey(e => e.ClientId);
+            });
+
+            builder.Entity<Quote>(entity =>
+            {
+                entity.ToTable("Quotes");
+                entity.HasKey(e => e.QuoteId);
+                entity.Property(e => e.QuoteId).HasColumnName("QuoteId").ValueGeneratedOnAdd();
+                entity.Property(e => e.ClientId).HasColumnName("ClientId").IsRequired();
+                entity.Property(e => e.Title).HasColumnType("varchar(100)").IsRequired();
+                entity.Property(e => e.Amount).HasColumnType("decimal(18,2)").IsRequired();
+                entity.Property(e => e.IssueDate).HasColumnType("date").IsRequired(); // Assuré non nullable
+                entity.Property(e => e.ExpiryDate).HasColumnType("date");
+                entity.Property(e => e.Status).HasColumnType("varchar(50)").IsRequired();
+                entity.Property(e => e.Details).HasColumnType("text");
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime").IsRequired(); // Assuré non nullable
+                entity.HasOne(e => e.Client).WithMany().HasForeignKey(e => e.ClientId);
+            });
+
         }
     }
 }
